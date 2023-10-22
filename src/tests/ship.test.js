@@ -14,9 +14,9 @@ test ('create submarine and add hit', () => {
 
 test ('create patrol boat and sink', () => {
     let patrolBoat = new Ship('patrol boat', 2);
-    expect(patrolBoat.isSunk()).toBe(false);
+    expect(patrolBoat.sunk).toBe(false);
     patrolBoat.hit();
     patrolBoat.hit();
-    expect(patrolBoat.isSunk()).toBe(true);
+    expect(patrolBoat.sunk).toBe(true);
 })
 
