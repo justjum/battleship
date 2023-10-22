@@ -5,8 +5,10 @@ export default class Gameboard {
         this.player = name;
         this.board = this.buildBoard();
         this.fleet = 0;
+        this.gameOver = false;
     }
 
+    //originally used a standard array however 'map' made referencing/updating squares simpler
     buildBoard() {
         let board = new Map();
         for (let x=0; x<10; x++) {
@@ -33,8 +35,8 @@ export default class Gameboard {
         
         return 'empty';
     }
-
-    placeShipHor(name, length, xpos, ypos) {
+    //originally had very similar hor/vert functions, ternery operator on 'orientation' neater refactor
+    placeShip(name, length, xpos, ypos, orient) {
         for (let x=1; x<=length; x++) {
             let tempx = xpos;
             let status = this.checkSpace(xpos, ypos);
@@ -45,27 +47,9 @@ export default class Gameboard {
         }
         for (let y=1; y<=length; y++) {
                 this.board.set(`${xpos},${ypos}`, name);
-            xpos++;
+            orient ? xpos++ : ypos++;
         }
         this.fleet++;
-    } 
-
-    placeShipVer(name, length, xpos, ypos) { 
-        for (let x=1; x<=length; x++) {
-            let tempy = ypos;
-            let status = this.checkSpace(xpos, ypos);
-            if (status !== 'empty') {
-                return console.log('block')
-            }
-            tempy++;
-        }
-
-        for (let y=1; y<=length; y++) {
-            this.board.set(`${xpos},${ypos}`, name);
-            ypos++;
-        }
-        
-        this.fleet++;        
     }
      
     receiveAttack(xpos, ypos) {
