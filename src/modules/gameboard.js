@@ -6,6 +6,7 @@ export default class Gameboard {
         this.board = this.buildBoard();
         this.fleet = 0;
         this.gameOver = false;
+        //this.defaultPlacement();
     }
 
     //originally used a standard array however 'map' made referencing/updating squares simpler
@@ -66,8 +67,14 @@ export default class Gameboard {
             return;
         }
     }
-    
-
+        // default placement of fleet to focus on DOM / gameplay
+        defaultPlacement() {
+            this.placeShip('carrier', 5, 0, 0, true);
+            this.placeShip('battleship', 4, 2, 1, false);
+            this.placeShip('destroyer', 3, 5, 4, true);
+            this.placeShip('submarine', 2, 6, 3, false);
+            this.placeShip('patrol boat', 1, 9, 9, true);
+        }
 }
 
 //const game = new Gameboard();

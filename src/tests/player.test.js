@@ -11,9 +11,5 @@ test ('check player gameboard co-ordinates', () => {
     expect(human.gameboard.board.get('0,0')).toBe('empty')
 });
 
-test ('check player turn', () => {
-    expect(human.turn).toBe(false);
-    human.endTurn();
-    expect(human.turn).toBe(true);
-});
+
 

@@ -1,14 +1,18 @@
 import Gameboard from './gameboard'
+import AIcontrol from './ai'
 
 export default class Player {
-    constructor(name, turn = false, control) {
+    constructor(name, control) {
         this.name = name;
-        this.turn = turn;
         this.ai = control,
         this.gameboard = new Gameboard(name);
     }
 
-    endTurn() {
-        this.turn = !this.turn;
+    aiTurn() {
+
     }
 } 
+
+
+
+//human and ai placements to come later
