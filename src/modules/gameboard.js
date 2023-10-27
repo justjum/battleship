@@ -6,7 +6,7 @@ export default class Gameboard {
         this.board = this.buildBoard();
         this.fleet = 0;
         this.gameOver = false;
-        //this.defaultPlacement();
+        this.defaultPlacement();
     }
 
     //originally used a standard array however 'map' made referencing/updating squares simpler
@@ -20,31 +20,26 @@ export default class Gameboard {
         return board;
     }
 
-    checkSpace(xpos, ypos) {
-        
+    checkSpace(xpos, ypos) {    
         let status = this.board.get(`${xpos},${ypos}`);
         if (status === undefined) {
             return 'off board'
         }
-        else if (status === 'empty') {
-            xpos++;
-        }
+        
         else {
             return `${status}`
         }
-            
-        
-        return 'empty';
     }
     //originally had very similar hor/vert functions, ternery operator on 'orientation' neater refactor
     placeShip(name, length, xpos, ypos, orient) {
+        let tempx = xpos;
+        let tempy = ypos;
         for (let x=1; x<=length; x++) {
-            let tempx = xpos;
-            let status = this.checkSpace(xpos, ypos);
+            let status = this.checkSpace(tempx, tempy);
             if (status !== 'empty') {
-                return console.log('block')
+                return 'block'
             }
-            tempx++;
+            orient ? tempx++ : tempy++;
         }
         for (let y=1; y<=length; y++) {
                 this.board.set(`${xpos},${ypos}`, name);
@@ -67,14 +62,14 @@ export default class Gameboard {
             return;
         }
     }
-        // default placement of fleet to focus on DOM / gameplay
-        defaultPlacement() {
-            this.placeShip('carrier', 5, 0, 0, true);
-            this.placeShip('battleship', 4, 2, 1, false);
-            this.placeShip('destroyer', 3, 5, 4, true);
-            this.placeShip('submarine', 2, 6, 3, false);
-            this.placeShip('patrol boat', 1, 9, 9, true);
-        }
+    // default placement of fleet to focus on DOM / gameplay
+    defaultPlacement() {
+        this.placeShip('carrier', 5, 0, 0, true);
+        this.placeShip('battleship', 4, 2, 1, false);
+        this.placeShip('destroyer', 3, 5, 4, true);
+        this.placeShip('submarine', 2, 7, 7, false);
+        this.placeShip('patrol boat', 1, 9, 9, true);
+    }
 }
 
 //const game = new Gameboard();

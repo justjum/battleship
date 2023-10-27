@@ -32,6 +32,11 @@ test ('place ship vertical', () => {
     expect(game.board.get('1,1')).toBe('empty');
 }); 
 
+test ('place ship is blocked by another ship', () => {
+    game.placeShip('carrier', 5, 0, 0, false);
+    expect(game.placeShip('battleship', 5, 0, 0, false)).toBe('block');
+})
+
 test ('fleet size increments by 1', () => {
     game.placeShip('carrier', 5, 0, 0, false);
     expect(game.fleet).toEqual(1);
