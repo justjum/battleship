@@ -19,5 +19,5 @@ test ('generate random move', () => {
 test ('pick unplayed square', () => {
     AI.moves.set('3,1', 'played');
     expect(AI.findUnplayedSquare('3,1')).toBe('1,1')
-
 });
+

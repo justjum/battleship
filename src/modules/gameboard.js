@@ -4,6 +4,7 @@ export default class Gameboard {
     constructor(name) {
         this.player = name;
         this.board = this.buildBoard();
+        this.ships = this.addShips();
         this.fleet = 0;
         this.gameOver = false;
         this.defaultPlacement();
@@ -19,6 +20,16 @@ export default class Gameboard {
         }
         return board;
     }
+    
+    addShips() {
+        let ships = [];
+        ships.push(new Ship('carrier', 5))
+        ships.push(new Ship('battleship', 4))
+        ships.push(new Ship('destroyer', 3))
+        ships.push(new Ship('submarine', 2))
+        ships.push(new Ship('patrol boat', 1))
+        return ships;
+    }
 
     checkSpace(xpos, ypos) {    
         let status = this.board.get(`${xpos},${ypos}`);
@@ -31,7 +42,7 @@ export default class Gameboard {
         }
     }
     //originally had very similar hor/vert functions, ternery operator on 'orientation' neater refactor
-    placeShip(name, length, xpos, ypos, orient) {
+    placeShip(index, length, xpos, ypos, orient) {
         let tempx = xpos;
         let tempy = ypos;
         for (let x=1; x<=length; x++) {
@@ -42,7 +53,7 @@ export default class Gameboard {
             orient ? tempx++ : tempy++;
         }
         for (let y=1; y<=length; y++) {
-                this.board.set(`${xpos},${ypos}`, name);
+                this.board.set(`${xpos},${ypos}`, index);
             orient ? xpos++ : ypos++;
         }
         this.fleet++;
@@ -54,9 +65,11 @@ export default class Gameboard {
             this.board.set(`${xpos},${ypos}`, 'miss');
         }
         else if (space !== undefined) {
+            console.log(space);
             this.board.set(`${xpos},${ypos}`, 'hit')
-            eval(space).hit();
-            eval(space).sunk ? this.fleet-- : '';
+            this.ships[space].hit();
+            this.ships[space].sunk ? this.fleet-- : '';
+            this.fleet === 0 ? alert('Game Over'): '';
         }
         else {
             return;
@@ -64,11 +77,11 @@ export default class Gameboard {
     }
     // default placement of fleet to focus on DOM / gameplay
     defaultPlacement() {
-        this.placeShip('carrier', 5, 0, 0, true);
-        this.placeShip('battleship', 4, 2, 1, false);
-        this.placeShip('destroyer', 3, 5, 4, true);
-        this.placeShip('submarine', 2, 7, 7, false);
-        this.placeShip('patrol boat', 1, 9, 9, true);
+        this.placeShip(0, 5, 0, 0, true);
+        this.placeShip(1, 4, 2, 1, false);
+        this.placeShip(2, 3, 5, 4, true);
+        this.placeShip(3, 2, 7, 7, false);
+        this.placeShip(4, 1, 9, 9, true);
     }
 }
 

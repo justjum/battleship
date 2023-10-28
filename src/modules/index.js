@@ -1,6 +1,7 @@
 import {buildPage, buildFleetBoard, buildMovesBoard} from './dom/dombuild'
 import {playGame} from './dom/domcontroller'
 import Game from './game'
+import Ship from './ship';
 
 
 const game = new Game;
@@ -11,3 +12,7 @@ buildMovesBoard(game.ai.gameboard.board, 'ai');
 buildFleetBoard(game.ai.gameboard.board, 'ai');
 buildMovesBoard(game.human.gameboard.board, 'human');
 playGame();
+
+
+
+export {game}

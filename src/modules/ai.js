@@ -17,23 +17,30 @@ export default class AIcontrol {
     }
 
     randomSquare() {
-        let x=Math.floor(Math.random()*9);
-        let y=Math.floor(Math.random()*9);
+        let x=Math.floor(Math.random()*10);
+        let y=Math.floor(Math.random()*10);
         return `${x},${y}`
     }
 
-    findUnplayedSquare(square=this.randomSquare(), status) {
+    findUnplayedSquare(checked = new Map, square=this.randomSquare(), status) {
         status = this.moves.get(square.toString())
         if (status === 'unplayed') {
+            
             return square;
         }
+        else if (checked.get(square.toString() === 'checked')) {
+            alert('this')
+            return;
+        }
         else {
-            return this.findUnplayedSquare();
+            checked.set(square.toString(), 'checked');
+            console.log(checked);
+            return this.findUnplayedSquare(checked);
         }
     }
 
     aimove() {
         let square = this.findUnplayedSquare();
-        
+        return square;
     }
 }

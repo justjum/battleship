@@ -21,7 +21,7 @@ function buildFleetBoard(board, player) {
         const square = document.createElement('div');
         square.setAttribute('class', 'fleetsquare');
         if (a !== 'empty') {
-            square.innerHTML = a[0];
+            square.innerHTML = a;
         }
         gameboard.append(square);
     })
@@ -29,9 +29,12 @@ function buildFleetBoard(board, player) {
 
 function buildMovesBoard(board, player) {
     const gameboard = document.getElementById(`${player}moves`);
-    board.forEach((a) => {
+    gameboard.textContent = '';
+    board.forEach((a, b) => {
+        let coords = b.replace(/[^0-9]/ig, "")
         const square = document.createElement('div');
         square.setAttribute('class', 'movesquare');
+        square.setAttribute('id', `${player}${coords}` )
         if (a === 'hit') {
             square.innerHTML = 'H'
         }

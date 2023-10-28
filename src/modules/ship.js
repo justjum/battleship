@@ -9,18 +9,20 @@ export default class Ship {
     hit() {
         this.hits++
         this.isSunk();
+        this.sunk ? this.shipSunk():'';
     }
 
     isSunk() {
         this.sunk = this.length === this.hits ? true : false;
+        
+    }
+
+    shipSunk() {
+        alert(`You sunk my ${this.name}`)
     }
 }
 
-function shipSunk(ship) {
-    ship.sunk = true;
-    console.log(`You sunk my ${ship}`)
-    gameActive();
-}
+
 
 
 /* const battleship = new Ship('battleship', 5);
