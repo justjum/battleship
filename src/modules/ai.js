@@ -25,7 +25,6 @@ export default class AIcontrol {
     findUnplayedSquare(checked = new Map, square=this.randomSquare(), status) {
         status = this.moves.get(square.toString())
         if (status === 'unplayed') {
-            
             return square;
         }
         else if (checked.get(square.toString() === 'checked')) {
