@@ -7,7 +7,7 @@ export default class Gameboard {
         this.ships = this.addShips();
         this.fleet = 0;
         this.gameOver = false;
-        this.defaultPlacement();
+        //this.defaultPlacement();
     }
 
     //originally used a standard array however 'map' made referencing/updating squares simpler

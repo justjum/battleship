@@ -27,6 +27,9 @@ export function playGame() {
 function loadEventListeners() {
     const moveSquare = document.querySelectorAll('.movesquare');
     moveSquare.forEach((square) => {
+        if (square.innerHTML === 'H' || square.innerHTML === 'M') {
+            return;
+        }
         square.addEventListener('mousedown', function() {
             let player = square.id.replace(/[^a-z]/ig, "")
             let coords = square.id.replace(/[^0-9]/ig, "")

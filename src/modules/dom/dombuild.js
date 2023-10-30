@@ -12,6 +12,13 @@ function buildPage() {
         <div class='gameboard' id='aifleet'></div>
         <div class='gameboard' id='aimoves'></div>
     </div>
+    <div class='ship-select' id='ship-select'>
+        <div class='ship' id='carrier'><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div></div>
+        <div class='ship' id='battleship'><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div></div>
+        <div class='ship' id='destroyer'><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div></div>
+        <div class='ship' id='submarine'><div class=ship-square></div><div class=ship-square></div></div>
+        <div class='ship' id='patrol-boat'><div class=ship-square></div></div>
+    </div>
     `
 }
 
