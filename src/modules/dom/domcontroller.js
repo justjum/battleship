@@ -1,5 +1,5 @@
 import {game} from '../index'
-import { buildMovesBoard } from './dombuild';
+import { buildMovesBoard, buildFleetBoard } from './dombuild';
 import Player from '../player'
 import AIcontrol from '../ai';
 
@@ -24,6 +24,52 @@ export function playGame() {
     }
 };
 
+function loadShipPlacement() {
+    const dragShip = document.querySelectorAll('.ship');
+    dragShip.forEach(ship => {
+        console.log(ship.id)
+        ship.addEventListener('dragstart', dragstart, true); 
+        ship.addEventListener('dragend', dragend(ship));
+    });
+    fleetEventListeners();
+    }
+
+
+function fleetEventListeners(fleet=5) {
+    const fleetSquare = document.querySelectorAll('.fleetsquare');
+    fleetSquare.forEach(square => {
+        square.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const dragging = document.querySelector('.dragging')
+            let id = dragging.id;
+            let length = dragging.getAttribute('data-length');
+            let coords = square.id;
+            const validDrop = false;
+        });
+        square.addEventListener('drop', () => {
+            console.log('drop')
+            const dragging = document.querySelector('.dragging')
+            let index = dragging.id.replace(/[^0-9]/ig, "");
+            console.log(index);
+            let coords = square.id.replace(/[^0-9]/ig, "")
+            let length = dragging.getAttribute('data-length');
+            let xpos = coords[0];
+            let ypos = coords[1];
+            game.human.gameboard.placeShip(index, length, xpos, ypos)
+            buildFleetBoard(game.human.gameboard.board, 'human');
+            console.log(game.human.gameboard.board);
+            dragging.removeAttribute('draggable');
+            dragging.classList.add('placedship')
+            dragging.removeEventListener('dragstart', dragstart())
+            dragging.removeEventListener('dragend', dragend());
+            fleet--
+            if (fleet !== 0) {
+                fleetEventListeners(fleet);
+            }
+        });
+    });
+};
+
 function loadEventListeners() {
     const moveSquare = document.querySelectorAll('.movesquare');
     moveSquare.forEach((square) => {
@@ -42,3 +88,24 @@ function loadEventListeners() {
         })
     });
 }
+
+function dragstart(ship) {
+    console.log(`drag ${ship.id}`);
+    console.log(ship);
+    ship.classList.add('dragging');
+};
+
+function dragend(ship) {
+        ship.classList.remove('dragging');
+    } 
+
+function placeShip(e, ship) {
+    e.preventDefault();
+    alert(`place me`)
+}
+
+function checkSpace(ship, length, square) {
+    
+}
+
+export {placeShip, checkSpace, loadShipPlacement}

@@ -29,6 +29,8 @@
 .ship {
     display: flex;
     padding: 5px;
+    width: fit-content;
+    cursor: move;
 }
 
 .ship-square {
@@ -37,3 +39,10 @@
     height: 40px;
 }
 
+.dragging {
+    background-color: brown;
+}
+
+.placedship {
+    opacity: 0.5;
+}

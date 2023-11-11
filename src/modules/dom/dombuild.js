@@ -1,6 +1,8 @@
 import Gameboard from '../gameboard'
 import Player from '../player'
+import { placeShip, dragover } from './domcontroller';
 export {buildPage, buildFleetBoard, buildMovesBoard}
+
 
 function buildPage() {
     const content = document.getElementById('content');
@@ -13,20 +15,24 @@ function buildPage() {
         <div class='gameboard' id='aimoves'></div>
     </div>
     <div class='ship-select' id='ship-select'>
-        <div class='ship' id='carrier'><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div></div>
-        <div class='ship' id='battleship'><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div></div>
-        <div class='ship' id='destroyer'><div class=ship-square></div><div class=ship-square></div><div class=ship-square></div></div>
-        <div class='ship' id='submarine'><div class=ship-square></div><div class=ship-square></div></div>
-        <div class='ship' id='patrol-boat'><div class=ship-square></div></div>
+        <div class='ship' draggable='true' id='0carrier' data-length=5>Carrier</div>
+        <div class='ship' draggable='true' id='1battleship' data-length=4>Battleship</div>
+        <div class='ship' draggable='true' id='2destroyer' data-length=3>Destroyer</div>
+        <div class='ship' draggable='true' id='3submarine' data-length=2>Submarine</div>
+        <div class='ship' draggable='true' id='4patrol-boat' data-length=1>Patrol Boat</div>
     </div>
     `
 }
 
 function buildFleetBoard(board, player) {
     const gameboard = document.getElementById(`${player}fleet`);
-    board.forEach((a) => {
+    gameboard.textContent = '';
+    board.forEach((a, b) => {
+        let coords = b.replace(/[^0-9]/ig, "")
         const square = document.createElement('div');
         square.setAttribute('class', 'fleetsquare');
+        square.setAttribute('id', `fleet${player}${coords}`)
+        square.setAttribute('ondrop', "alert(id)")
         if (a !== 'empty') {
             square.innerHTML = a;
         }
@@ -41,7 +47,7 @@ function buildMovesBoard(board, player) {
         let coords = b.replace(/[^0-9]/ig, "")
         const square = document.createElement('div');
         square.setAttribute('class', 'movesquare');
-        square.setAttribute('id', `${player}${coords}` )
+        square.setAttribute('id', `move${player}${coords}` )
         if (a === 'hit') {
             square.innerHTML = 'H'
         }
@@ -51,3 +57,5 @@ function buildMovesBoard(board, player) {
         gameboard.append(square);
     })
 }
+
+//ondragstart=alert(id)
