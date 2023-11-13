@@ -32,7 +32,6 @@ function buildFleetBoard(board, player) {
         const square = document.createElement('div');
         square.setAttribute('class', 'fleetsquare');
         square.setAttribute('id', `fleet${player}${coords}`)
-        square.setAttribute('ondrop', "alert(id)")
         if (a !== 'empty') {
             square.innerHTML = a;
         }

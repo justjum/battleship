@@ -6,6 +6,7 @@ export default class Player {
         this.name = name;
         this.ai = control,
         this.gameboard = new Gameboard(name);
+        this.placedShips = 5;
     }
 
     aiTurn() {

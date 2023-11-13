@@ -43,6 +43,10 @@
     background-color: brown;
 }
 
+.allowed {
+    background-color: lightgreen;
+}
+
 .placedship {
     opacity: 0.5;
 }
