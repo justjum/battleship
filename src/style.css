@@ -47,6 +47,10 @@
     background-color: lightgreen;
 }
 
+.disallowed {
+    background-color: lightcoral;
+}
+
 .placedship {
     opacity: 0.5;
 }

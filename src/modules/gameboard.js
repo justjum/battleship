@@ -41,6 +41,27 @@ export default class Gameboard {
             return `${status}`
         }
     }
+
+    checkValidDrop(length, xpos, ypos, orient, validDrop=true) {
+        for (let x=0; x<length; x++) {
+            console.log(length, xpos, ypos, orient, validDrop)
+            const square = document.getElementById(`fleethuman${xpos}${ypos}`)
+            console.log(square)
+            if (square === null) {
+                validDrop=false;
+                break;
+            }
+            let status = this.checkSpace(xpos, ypos);
+            console.log(validDrop)
+            if (status !== 'empty') {
+                validDrop=false;
+            }
+            orient ? ypos++ : xpos++;
+
+        }
+        console.log(validDrop)
+        return validDrop
+    }
     //originally had very similar hor/vert functions, ternery operator on 'orientation' neater refactor
     placeShip(index, length, xpos, ypos, orient) {
         let tempx = xpos;

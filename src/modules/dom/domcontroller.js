@@ -1,120 +1,126 @@
-import {game} from '../index'
+import {game, controller} from '../index'
 import { buildMovesBoard, buildFleetBoard } from './dombuild';
 import Player from '../player'
-import AIcontrol from '../ai';
 
-let aiControl = new AIcontrol;
-
-export function playGame() {
-    if (game.attack === game.human) {
-        loadEventListeners();
+export default class DOMController {
+    constructor(orient=true) {
+        this.orient = orient;
     }
-    else {
-        let square = aiControl.aimove();
-        aiControl.moves.set(square, 'played')
-        let coords = square.replace(/[^0-9]/ig, "")
+
+    loadShipPlacement() {
+        const dragShip = document.querySelectorAll('.ship');
+        console.log(dragShip)
+        dragShip.forEach((ship) => {
+            ship.addEventListener('dragstart', this.dragStart); 
+            ship.addEventListener('dragend', this.dragEnd);
+        });
+        this.fleetEventListeners();
+    }
+
+    fleetEventListeners() {
+        const fleetSquare = document.querySelectorAll('.fleetsquare');
+        fleetSquare.forEach((square) => {
+            square.addEventListener('dragover', this.dragOverEventHandler);
+            square.addEventListener('dragleave', this.dragLeaveEventHandler);
+            square.addEventListener('drop', this.dropEventHandler);
+        });
+    }
+
+    dragStart(event) {
+        console.log('dragstart')
+        this.classList.add('dragging')
+    }
+
+    dragEnd(event){
+        event.preventDefault();
+        this.classList.remove('dragging');
+    }
+
+    dragOverEventHandler(event) {
+        event.preventDefault();
+        const dragging = document.querySelector('.dragging')
+        let length = dragging.getAttribute('data-length');
+        let coords = this.id.replace(/[^0-9]/ig, "");
+        console.log(coords)
         let xpos = coords[0];
         let ypos = coords[1];
-        game.ai.gameboard.receiveAttack(xpos,ypos)
-        buildMovesBoard(game.ai.gameboard.board, `ai`)
-        console.log(aiControl.moves)
-        game.endTurn();
-        playGame();
-        console.log(square);
-    }
-};
-
-function loadShipPlacement() {
-    const dragShip = document.querySelectorAll('.ship');
-    dragShip.forEach(ship => {
-        console.log(ship.id)
-        ship.addEventListener('dragstart', dragstart); 
-        ship.addEventListener('dragend', dragend);
-    });
-    fleetEventListeners();
-    }
-
-
-function fleetEventListeners() {
-    const fleetSquare = document.querySelectorAll('.fleetsquare');
-    fleetSquare.forEach(square => {
-        square.addEventListener('dragover', dragoverEventHandler);
-        square.addEventListener('drop', dropEventHandler);
-    });
-};
-
-function loadEventListeners() {
-    const moveSquare = document.querySelectorAll('.movesquare');
-    moveSquare.forEach((square) => {
-        if (square.innerHTML === 'H' || square.innerHTML === 'M') {
-            return;
+        console.log(length)
+        let validDrop = true;
+        if (game.human.gameboard.checkValidDrop(length, xpos, ypos, controller.orient) === false) {
+            validDrop = false;
         }
-        square.addEventListener('mousedown', function() {
-            let player = square.id.replace(/[^a-z]/ig, "")
-            let coords = square.id.replace(/[^0-9]/ig, "")
-            let xpos = coords[0];
-            let ypos = coords[1];
-            game[player].gameboard.receiveAttack(xpos,ypos)
-            buildMovesBoard(game[player].gameboard.board, `${player}` )
-            game.endTurn();
-            playGame();
-        })
-    });
-}
+        controller.colorDropSquares(xpos, ypos, length, this.orient, validDrop)
+    }
 
-function dragstart() {
-    this.classList.add('dragging');
-};
-
-function dragend(event) {
-    event.preventDefault();
-    this.classList.remove('dragging');
-    } 
-
-function dragoverEventHandler(event) {
-    event.preventDefault();
-    const dragging = document.querySelector('.dragging')
-    let length = dragging.getAttribute('data-length');
-    console.log(this)
-    let coords = this.id.replace(/[^0-9]/ig, "");
-    let xpos = coords[0];
-    let ypos = coords[1];
-    let tempx = xpos;
-    let tempy = ypos;
-    console.log(length)
-    let orient = true;
-    for (let x=1; x<=length; x++) {
-        const square = document.getElementById(`fleethuman${tempx}${tempy}`)
-        let status = game.human.gameboard.checkSpace(tempx, tempy);
-        console.log(status);
-        if (status === 'empty') {
-            square.classList.add('allowed');
+    colorDropSquares(xpos, ypos, length, orient, validDrop) {
+        for (let x=0; x<length; x++) {
+            const square = document.getElementById(`fleethuman${xpos}${ypos}`)
+            if (square !== null) {
+                validDrop ? square.classList.add('allowed') : square.classList.add('disallowed');
+            }
+            
+            orient ? xpos++ : ypos++;
         }
-        orient ? tempx++ : tempy++;
+        
+    }    
+
+    dragLeaveEventHandler(event) {
+        event.preventDefault();
+        console.log('dragleave');
+        controller.decolorDropSquares()
     }
-    const validDrop = false;
+
+    decolorDropSquares() {
+        const elements = document.querySelectorAll('*');
+        elements.forEach((square) => {
+            square.classList.remove('allowed');
+            square.classList.remove('disallowed');
+        });
+    
+    };
+
+    dropEventHandler(event, fleet) {
+        event.preventDefault();
+        console.log('drop')
+        const dragging = document.querySelector('.dragging')
+        let index = dragging.id.replace(/[^0-9]/ig, "");
+        let coords = this.id.replace(/[^0-9]/ig, "")
+        let length = dragging.getAttribute('data-length');
+        let xpos = coords[0];
+        let ypos = coords[1];
+        if (game.human.gameboard.checkValidDrop(length, xpos, ypos, controller.orient) === true) {
+            game.human.gameboard.placeShip(index, length, xpos, ypos)
+            buildFleetBoard(game.human.gameboard.board, 'human');
+            console.log(game.human.gameboard.board);
+            dragging.removeAttribute('draggable');
+            dragging.classList.add('placedship')
+            dragging.removeEventListener('dragstart', this.dragstart)
+            game.human.placedShips--
+        }
+        if (game.human.placedShips >= 0) {
+            controller.fleetEventListeners();
+        }
+    }
+
+    gameplayEventListeners() {
+        const moveSquare = document.querySelectorAll('.movesquare');
+        moveSquare.forEach((square) => {
+            if (square.innerHTML === 'H' || square.innerHTML === 'M') {
+                return;
+            }
+            square.addEventListener('mousedown', function() {
+                let player = square.id.replace(/[^a-z]/ig, "")
+                let coords = square.id.replace(/[^0-9]/ig, "")
+                let xpos = coords[0];
+                let ypos = coords[1];
+                game[player].gameboard.receiveAttack(xpos,ypos)
+                buildMovesBoard(game[player].gameboard.board, `${player}` )
+                game.endTurn();
+                playGame();
+            })
+        });
+    }
 }
 
-function dropEventHandler(event, fleet) {
-    event.preventDefault();
-    console.log('drop')
-    const dragging = document.querySelector('.dragging')
-    let index = dragging.id.replace(/[^0-9]/ig, "");
-    let coords = this.id.replace(/[^0-9]/ig, "")
-    let length = dragging.getAttribute('data-length');
-    let xpos = coords[0];
-    let ypos = coords[1];
-    game.human.gameboard.placeShip(index, length, xpos, ypos)
-    buildFleetBoard(game.human.gameboard.board, 'human');
-    console.log(game.human.gameboard.board);
-    dragging.removeAttribute('draggable');
-    dragging.classList.add('placedship')
-    dragging.removeEventListener('dragstart', dragstart)
-    game.human.placedShips--
-    console.log(game.human.placedShips);
-    if (game.human.placedShips >= 0) {
-        fleetEventListeners();
-    }
-}
 
-export {loadShipPlacement}
+
