@@ -26,11 +26,24 @@
     justify-content: center;
 }
 
+.fleets {
+    display: flex;
+}
+
 .ship {
     display: flex;
     padding: 5px;
     width: fit-content;
     cursor: move;
+    height: 40px;
+}
+
+.aiship {
+    display: flex;
+    padding: 5px;
+    width: fit-content;
+    cursor: move;
+    height: 40px;
 }
 
 .ship-square {
@@ -53,4 +66,9 @@
 
 .placedship {
     opacity: 0.5;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
 }

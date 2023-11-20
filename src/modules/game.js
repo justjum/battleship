@@ -1,6 +1,7 @@
 import Player from '../modules/player'
-import {controller} from '../index'
+import {controller, aiControl} from './index'
 import DOMController from './dom/domcontroller';
+import { buildFleetBoard } from './dom/dombuild';
 
 export default class Game {
     constructor() {
@@ -12,7 +13,7 @@ export default class Game {
 
     playGame() {
         if (this.attack === this.human) {
-            this.gameplayEventListeners();
+            controller.gameplayEventListeners();
         }
         else {
             let square = aiControl.aimove();
@@ -20,11 +21,10 @@ export default class Game {
             let coords = square.replace(/[^0-9]/ig, "")
             let xpos = coords[0];
             let ypos = coords[1];
-            this.ai.gameboard.receiveAttack(xpos,ypos)
-            buildMovesBoard(this.ai.gameboard.board, `ai`)
-            console.log(aiControl.moves)
+            this.human.gameboard.receiveAttack(xpos,ypos)
+            buildFleetBoard(this.human.gameboard.board, 'human')
             this.endTurn();
-            playGame();
+            this.playGame();
         }
     }
 
@@ -34,23 +34,5 @@ export default class Game {
         this.defend = temp;
     }
 
-    gameplayEventListeners() {
-        const moveSquare = document.querySelectorAll('.movesquare');
-        moveSquare.forEach((square) => {
-            if (square.innerHTML === 'H' || square.innerHTML === 'M') {
-                return;
-            }
-            square.addEventListener('mousedown', function() {
-                let player = square.id.replace(/[^a-z]/ig, "")
-                let coords = square.id.replace(/[^0-9]/ig, "")
-                let xpos = coords[0];
-                let ypos = coords[1];
-                this.ai.gameboard.receiveAttack(xpos,ypos)
-                buildMovesBoard(this.ai.gameboard.board, `${ai}` )
-                game.endTurn();
-                playGame();
-            })
-        });
-    }
 }
 

@@ -9,7 +9,6 @@ export default class DOMController {
 
     loadShipPlacement() {
         const dragShip = document.querySelectorAll('.ship');
-        console.log(dragShip)
         dragShip.forEach((ship) => {
             ship.addEventListener('dragstart', this.dragStart); 
             ship.addEventListener('dragend', this.dragEnd);
@@ -27,7 +26,6 @@ export default class DOMController {
     }
 
     dragStart(event) {
-        console.log('dragstart')
         this.classList.add('dragging')
     }
 
@@ -41,10 +39,8 @@ export default class DOMController {
         const dragging = document.querySelector('.dragging')
         let length = dragging.getAttribute('data-length');
         let coords = this.id.replace(/[^0-9]/ig, "");
-        console.log(coords)
         let xpos = coords[0];
         let ypos = coords[1];
-        console.log(length)
         let validDrop = true;
         if (game.human.gameboard.checkValidDrop(length, xpos, ypos, controller.orient) === false) {
             validDrop = false;
@@ -66,7 +62,6 @@ export default class DOMController {
 
     dragLeaveEventHandler(event) {
         event.preventDefault();
-        console.log('dragleave');
         controller.decolorDropSquares()
     }
 
@@ -81,7 +76,6 @@ export default class DOMController {
 
     dropEventHandler(event, fleet) {
         event.preventDefault();
-        console.log('drop')
         const dragging = document.querySelector('.dragging')
         let index = dragging.id.replace(/[^0-9]/ig, "");
         let coords = this.id.replace(/[^0-9]/ig, "")
@@ -91,14 +85,17 @@ export default class DOMController {
         if (game.human.gameboard.checkValidDrop(length, xpos, ypos, controller.orient) === true) {
             game.human.gameboard.placeShip(index, length, xpos, ypos)
             buildFleetBoard(game.human.gameboard.board, 'human');
-            console.log(game.human.gameboard.board);
             dragging.removeAttribute('draggable');
             dragging.classList.add('placedship')
             dragging.removeEventListener('dragstart', this.dragstart)
             game.human.placedShips--
         }
-        if (game.human.placedShips >= 0) {
+        if (game.human.placedShips > 0) {
             controller.fleetEventListeners();
+        }
+        else {
+            alert('lets go');
+            game.playGame();
         }
     }
 
@@ -113,13 +110,15 @@ export default class DOMController {
                 let coords = square.id.replace(/[^0-9]/ig, "")
                 let xpos = coords[0];
                 let ypos = coords[1];
-                game[player].gameboard.receiveAttack(xpos,ypos)
-                buildMovesBoard(game[player].gameboard.board, `${player}` )
+                game.ai.gameboard.receiveAttack(xpos,ypos)
+                buildMovesBoard(game.ai.gameboard.board, `human` )
                 game.endTurn();
-                playGame();
+                game.playGame();
             })
         });
     }
+
+
 }
 
 
