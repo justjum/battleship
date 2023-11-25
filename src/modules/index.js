@@ -9,13 +9,15 @@ import Destroyer from '../images/destroyer.png'
 import Submarine from '../images/submarine.png'
 import PatrolBoat from '../images/patrolboat.png'
 
+
+buildPage();
 const controller = new DOMController;
 const game = new Game;
 
 const aiControl = new AIcontrol;
 console.log(game.human.gameboard.board);
 console.log(game.ai.gameboard.board);
-buildPage();
+
 buildFleetBoard(game.human.gameboard.board, 'human');
 buildMovesBoard(game.human.gameboard.board, 'human');
 controller.loadShipPlacement();

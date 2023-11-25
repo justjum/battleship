@@ -5,8 +5,8 @@ import { buildFleetBoard } from './dom/dombuild';
 
 export default class Game {
     constructor() {
-        this.human = new Player('greg', false);
-        this.ai = new Player('battlebot', true);
+        this.human = new Player('Anonymous', false);
+        this.ai = new Player('Battlebot', true);
         this.attack = this.human;
         this.defend = this.ai;
     }

@@ -1,10 +1,51 @@
 import {game, controller} from '../index'
 import { buildMovesBoard, buildFleetBoard } from './dombuild';
+import Compassx from '../../images/compassx.png'
+import Compassy from '../../images/compassy.png'
 import Player from '../player'
 
 export default class DOMController {
     constructor(orient=true) {
         this.orient = orient;
+        
+    }
+
+    acceptInstructions() {
+        document.getElementById('playgame').onclick = () => {
+            let input = document.getElementById('player-name');
+            if (input.value !== "") {
+                game.human.name = input.value;
+                document.getElementById('instructions').style.display = 'none'
+                this.toggleGrey('none');
+            }
+            else {
+                input.classList.add('required');
+            }
+            
+        }
+    }
+
+    toggleGrey(value) {
+        const greyOut = document.getElementById('grey-out');
+        greyOut.style.display = value;
+    }
+
+    alert(message) {
+        this.toggleGrey('flex');
+        const alertBox = document.getElementById('alert-box');
+        alertBox.children[0].innerText = message;
+        alertBox.style.display = 'flex';
+    }
+
+    alertListener() {
+        document.getElementById('accept-alert').onclick = () => {
+            this.acceptAlert();
+        }
+    }
+
+    acceptAlert() {
+        this.toggleGrey('none');
+        document.getElementById('alert-box').style.display = 'none'
     }
 
     loadShipPlacement() {
@@ -14,6 +55,9 @@ export default class DOMController {
             ship.addEventListener('dragend', this.dragEnd);
         });
         this.fleetEventListeners();
+        this.compassEventListener();
+        this.acceptInstructions();
+        this.alertListener();
     }
 
     fleetEventListeners() {
@@ -45,17 +89,17 @@ export default class DOMController {
         if (game.human.gameboard.checkValidDrop(length, xpos, ypos, controller.orient) === false) {
             validDrop = false;
         }
-        controller.colorDropSquares(xpos, ypos, length, this.orient, validDrop)
+        controller.colorDropSquares(xpos, ypos, length, validDrop)
     }
 
-    colorDropSquares(xpos, ypos, length, orient, validDrop) {
+    colorDropSquares(xpos, ypos, length, validDrop) {
         for (let x=0; x<length; x++) {
             const square = document.getElementById(`fleethuman${xpos}${ypos}`)
             if (square !== null) {
                 validDrop ? square.classList.add('allowed') : square.classList.add('disallowed');
             }
             
-            orient ? xpos++ : ypos++;
+            controller.orient ? xpos++ : ypos++;
         }
         
     }    
@@ -66,7 +110,7 @@ export default class DOMController {
     }
 
     decolorDropSquares() {
-        const elements = document.querySelectorAll('*');
+        const elements = document.querySelectorAll('.fleetsquare');
         elements.forEach((square) => {
             square.classList.remove('allowed');
             square.classList.remove('disallowed');
@@ -83,20 +127,32 @@ export default class DOMController {
         let xpos = coords[0];
         let ypos = coords[1];
         if (game.human.gameboard.checkValidDrop(length, xpos, ypos, controller.orient) === true) {
-            game.human.gameboard.placeShip(index, length, xpos, ypos)
+            game.human.gameboard.placeShip(index, length, xpos, ypos, controller.orient)
             buildFleetBoard(game.human.gameboard.board, 'human');
-            dragging.removeAttribute('draggable');
-            dragging.classList.add('placedship')
-            dragging.removeEventListener('dragstart', this.dragstart)
+            dragging.classList.add('placedship');
+            dragging.removeEventListener('dragstart', this.dragStart)
+            dragging.removeEventListener('dragstart', this.dragEnd, false)
+            dragging.setAttribute('draggable', false)
             game.human.placedShips--
         }
         if (game.human.placedShips > 0) {
             controller.fleetEventListeners();
         }
         else {
-            alert('lets go');
+            controller.alert(`Let's go!`)
+            document.getElementById('aisection').style.opacity = 1;
             game.playGame();
         }
+    }
+
+    compassEventListener() {
+        const compass = document.getElementById('compass');
+        compass.addEventListener('click', ()=>{
+            this.orient = !this.orient;
+            let compassImage = this.orient ? Compassx : Compassy;
+            console.log(compassImage)
+            compass.setAttribute('src', `${compassImage}`)
+        })
     }
 
     gameplayEventListeners() {
@@ -117,6 +173,7 @@ export default class DOMController {
             })
         });
     }
+
 
 
 }

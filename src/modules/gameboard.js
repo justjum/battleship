@@ -53,7 +53,7 @@ export default class Gameboard {
             if (status !== 'empty') {
                 validDrop=false;
             }
-            orient ? ypos++ : xpos++;
+            orient ? xpos++ : ypos++;
 
         }
         return validDrop
