@@ -1,4 +1,4 @@
-import { game } from './index'
+import { game, controller } from './index'
 
 export default class Ship {
     constructor(name, length, hits = 0, sunk = false) {
@@ -20,7 +20,8 @@ export default class Ship {
     }
 
     shipSunk() {
-        alert(`${game.attack.name} sunk ${game.defend.name}'s ${this.name}`)
+        controller.alert(`${game.attack.name} sunk ${game.defend.name}'s ${this.name}`)
+        controller.sunkShip(this.name);
     }
 }
 

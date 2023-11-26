@@ -9,6 +9,7 @@ import PatrolBoat from '../../images/patrolboat.png'
 import Compassx from '../../images/compassx.png'
 import Miss from '../../images/miss.png'
 import Hit from '../../images/hit.png'
+import ShipSquare from '../../images/shipsquare.png'
 export {buildPage, buildFleetBoard, buildMovesBoard}
 
 
@@ -21,11 +22,15 @@ function buildPage() {
         <div class='section' id='humansection'>
             <div class='alert-box' id='alert-box'>
                 <h2 class='alert' id='alert'>Alert</h2>
-                <button class='accept-alert' id='accept-alert'>Ok!</button>
+                <button class='accept-alert' id='accept-alert'>Clear Message</button>
+            </div>
+            <div class='game-over-box' id='game-over-box'>
+                <h2 class='alert'> </h2>
+                <button class='accept-alert' id='restart-game'>Restart Game</button>
             </div>
             <div class='instructions' id='instructions'>
                 <p>1. Please enter your name below:</p>
-                <input type='text' class='player-name' id='player-name' name='player-name' placeholder='Please enter your name here'>
+                <input type='text' class='player-name' id='player-name' name='player-name' placeholder='Player Name'>
                 <p>2. Drag and drop your fleet onto the gameboard</p>
                 <p>3. Click on the compass to adjust the direction of drop</p>
                 <button class='playgame' id='playgame'>I'm ready!</button>
@@ -35,8 +40,8 @@ function buildPage() {
                 <img class='ship' draggable='true' id='0carrier' data-length=5 src='${Carrier}'>
                 <img class='ship' draggable='true' id='1battleship' data-length=4 src='${Battleship}'>
                 <img class='ship' draggable='true' id='2destroyer' data-length=3 src='${Destroyer}'>
-                <img class='ship' draggable='true' id='3submarine' data-length=2 src='${Submarine}'>
-                <img class='ship' draggable='true' id='4patrol-boat' data-length=1 src='${PatrolBoat}'>
+                <img class='ship' draggable='true' id='3submarine' data-length=3 src='${Submarine}'>
+                <img class='ship' draggable='true' id='4patrol-boat' data-length=2 src='${PatrolBoat}'>
                 <img class='compass' id='compass' src='${Compassx}'>
             </div>
         </div>
@@ -66,8 +71,18 @@ function buildFleetBoard(board, player) {
         square.setAttribute('class', 'fleetsquare');
         square.setAttribute('id', `fleet${player}${coords}`)
         if (a !== 'empty') {
+            let b;
+            switch (a) {
+                case 'hit': b = Hit;
+                break;
+                case 'miss': b = Miss;
+                break;
+                case a: b = ShipSquare;
+                break;
+            }
             let icon = document.createElement('img');
-            icon.setAttribute('src', a);
+            icon.setAttribute('src', b);
+            icon.setAttribute('class', 'icon')
             square.appendChild(icon);
         }
         gameboard.append(square);
@@ -83,9 +98,11 @@ function buildMovesBoard(board, player) {
         square.setAttribute('class', 'movesquare');
         square.setAttribute('id', `move${player}${coords}` )
         if (a === 'hit') {
+            square.setAttribute('played', '');
             square.innerHTML = `<img class='icon' src=${Hit}>`
         }
         else if (a === 'miss') {
+            square.setAttribute('played', '');
             square.innerHTML = `<img class='icon' src=${Miss}>`
         }
         gameboard.append(square);

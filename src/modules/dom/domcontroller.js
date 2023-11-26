@@ -48,6 +48,19 @@ export default class DOMController {
         document.getElementById('alert-box').style.display = 'none'
     }
 
+    gameOver(message) {
+        this.toggleGrey('flex');
+        const gameOverBox = document.getElementById('game-over-box');
+        gameOverBox.children[0].innerText = message;
+        gameOverBox.style.display = 'flex';
+    }
+
+    gameOverListener() {
+        document.getElementById('restart-game').onclick = () => {
+            document.location.reload();
+        }
+    }
+
     loadShipPlacement() {
         const dragShip = document.querySelectorAll('.ship');
         dragShip.forEach((ship) => {
@@ -58,6 +71,7 @@ export default class DOMController {
         this.compassEventListener();
         this.acceptInstructions();
         this.alertListener();
+        this.gameOverListener();
     }
 
     fleetEventListeners() {
@@ -158,7 +172,8 @@ export default class DOMController {
     gameplayEventListeners() {
         const moveSquare = document.querySelectorAll('.movesquare');
         moveSquare.forEach((square) => {
-            if (square.innerHTML === 'H' || square.innerHTML === 'M') {
+            if (square.hasAttribute('played')) {
+                console.log('yup');
                 return;
             }
             square.addEventListener('mousedown', function() {

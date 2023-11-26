@@ -8,9 +8,11 @@ export default class AIcontrol {
 
     }
 
-    placeFleet(fleet=5, index=0, length=5) {
+    placeFleet(fleet=5, index=0) {
         while (fleet>0) {
             console.log('aiplacing')
+            let ship = game.ai.gameboard.ships[index];
+            let length = ship.length;
             let y = this.randomInteger();
             let z = this.randomInteger();
             let orient = this.randomOrient();

@@ -3,10 +3,16 @@
     src: url(./fonts/ITC\ Machine\ Std\ Bold.otf);
 }
 
+@font-face {
+    font-family: 'Lunchtime';
+    src: url(./fonts/lunchds.ttf);
+}
+
 body {
-    background-color: rgb(5, 75, 133);
+    background-color: rgb(47, 54, 61);
     display: flex;
     justify-content: center;
+    margin: 0;
 }
 
 .grey-out {
@@ -22,11 +28,13 @@ body {
 h1 {
     font-family: 'ITC-Machine';
     outline: rgb(47, 54, 61);
-    color: slategrey;
+    color: rgb(148, 167, 185);
     font-size: 80px;
     margin: 0;
+    margin-top: 20px;
     display: flex;
     justify-content: center;
+    line-height: 0.75em;
 }
 
 .container {
@@ -42,6 +50,8 @@ h1 {
     height: auto;
     display: flex;
     position: relative;
+    padding: 3px;
+    margin: 10px;
 }
 
 .gameboard {
@@ -60,34 +70,67 @@ h1 {
 
 #aisection {
     position: relative;
-    opacity: 0.7;
+    opacity: 0.3;
 }
 
 .alert-box {
     position: absolute;
     display: none;
-    background-color: white;
+    background-color: rgb(51, 54, 56);
     padding: 20px;
     opacity: 1;
     top: 100px;
     left: 100px;
     right: 100px;
     z-index: 5;
+    font-family: 'Lunchtime';
+    color: rgb(148, 167, 185);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-over-box {
+    position: absolute;
+    display: none;
+    background-color: rgb(51, 54, 56);
+    padding: 20px;
+    opacity: 1;
+    top: 100px;
+    left: 100px;
+    right: 100px;
+    z-index: 5;
+    font-family: 'Lunchtime';
+    color: rgb(148, 167, 185);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+button {
+    font-family: 'Courier New', Courier, monospace;
+    width: 100px;
+    justify-self: center;
 }
 
 .instructions {
     position: absolute;
-    background-color: white;
+    background-color: rgb(51, 54, 56);
     padding: 20px;
     opacity: 1;
     top: 100px;
     left: 100px;
     right: 100px;
     z-index: 3;
+    font-family: 'Lunchtime';
+    color: rgb(190, 215, 238);
+    font-size: larger;
 }
 
 .required {
-    border-color: coral;
+    border-color: rgb(255, 80, 80);
+    border-width: 5px;
+    background-color: rgb(245, 200, 200);
 }
 
 
@@ -101,12 +144,17 @@ h1 {
     justify-content: center;
 }
 
+.movesquare:hover {
+    cursor: crosshair;
+    background-color: lightcoral;
+}
+
 
 .compass {
     width: 200px;
     position: absolute;
-    right: 50px;
-    bottom: 50px;
+    right: 30px;
+    bottom: 30px;
 }
 
 .ship-select {
@@ -131,6 +179,7 @@ h1 {
 }
 
 .ship-square {
+    position: relative;
     outline: steelblue solid 1px;
     background-color: rgb(144, 205, 255);
     width: 40px;

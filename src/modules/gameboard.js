@@ -1,4 +1,5 @@
 import Ship from './ship'
+import { controller } from './index'
 
 export default class Gameboard {
     constructor(name) {
@@ -26,8 +27,8 @@ export default class Gameboard {
         ships.push(new Ship('carrier', 5))
         ships.push(new Ship('battleship', 4))
         ships.push(new Ship('destroyer', 3))
-        ships.push(new Ship('submarine', 2))
-        ships.push(new Ship('patrol boat', 1))
+        ships.push(new Ship('submarine', 3))
+        ships.push(new Ship('patrol boat', 2))
         return ships;
     }
 
@@ -89,7 +90,7 @@ export default class Gameboard {
             this.board.set(`${xpos},${ypos}`, 'hit')
             this.ships[space].hit();
             this.ships[space].sunk ? this.fleet-- : '';
-            this.fleet === 0 ? alert('Game Over'): '';
+            this.fleet === 0 ? controller.gameOver(`Jum has won the battle`): '';
         }
         else {
             return;
