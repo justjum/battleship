@@ -137,8 +137,8 @@ button {
 .fleetsquare, .movesquare {
     outline: steelblue solid 1px;
     background-color: rgb(144, 205, 255);
-    width: auto;
-    height: auto;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -165,7 +165,7 @@ button {
 .ship {
     display: flex;
     padding: 5px;
-    width: fit-content;
+    width: max-content;
     cursor: move;
     height: 40px;
 }
@@ -173,7 +173,7 @@ button {
 .aiship {
     display: flex;
     padding: 5px;
-    width: fit-content;
+    width: max-content;
     cursor: move;
     height: 40px;
 }
