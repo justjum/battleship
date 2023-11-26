@@ -21,7 +21,7 @@ export default class Ship {
 
     shipSunk() {
         controller.alert(`${game.attack.name} sunk ${game.defend.name}'s ${this.name}`)
-        controller.sunkShip(this.name);
+        //controller.sunkShip(this.name);
     }
 }
 

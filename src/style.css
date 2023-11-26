@@ -186,10 +186,6 @@ button {
     height: 40px;
 }
 
-.dragging {
-    background-color: rgb(165, 147, 42);
-}
-
 .allowed {
     background-color: lightgreen;
 }
